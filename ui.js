@@ -1,8 +1,7 @@
 /**
  * COURTSIDE — Common UI utilities
- * Mobile menu · active nav · scroll reveal · header state
+ * Mobile menu · active nav · scroll reveal · side decor
  */
-
 (function () {
   "use strict";
 
@@ -102,11 +101,46 @@
     });
   }
 
+  function injectSideDecor() {
+    if (document.querySelector(".side-decor")) return;
+    const left = document.createElement("div");
+    left.className = "side-decor side-decor-left";
+    left.setAttribute("aria-hidden", "true");
+    left.innerHTML =
+      '<div class="side-line"></div>' +
+      '<div class="side-circle md"></div>' +
+      '<div class="side-circle sm"></div>' +
+      '<div class="side-circle filled"></div>' +
+      '<div class="side-circle"></div>' +
+      '<div class="side-label">COURTSIDE</div>' +
+      '<div class="side-circle sm"></div>' +
+      '<div class="side-line"></div>';
+    const right = document.createElement("div");
+    right.className = "side-decor side-decor-right";
+    right.setAttribute("aria-hidden", "true");
+    right.innerHTML =
+      '<div class="side-line"></div>' +
+      '<div class="side-circle"></div>' +
+      '<div class="side-circle filled"></div>' +
+      '<div class="side-circle md"></div>' +
+      '<div class="side-label">NBA · GI</div>' +
+      '<div class="side-circle sm"></div>' +
+      '<div class="side-circle"></div>' +
+      '<div class="side-line"></div>';
+    document.body.appendChild(left);
+    document.body.appendChild(right);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     initMobileMenu();
     setActiveNav();
     showDemoBadges();
     initHeaderScroll();
     initReveal();
+    injectSideDecor();
   });
+
+  window.COURTSIDE_UI = {
+    initReveal: initReveal
+  };
 })();
