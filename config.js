@@ -1,21 +1,19 @@
 // COURTSIDE — Configuration
-// Replace with your Supabase project values when ready.
+// Supabase project: coursideau
 
 const CONFIG = {
-  // Supabase (leave empty for pure demo mode)
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: "",
+  // Base project URL (without /rest/v1/)
+  SUPABASE_URL: "https://uoslrsahdcsuitdnvnzf.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_s3a_CpM8uimE9GBGcF90fQ_Okv5jaue",
 
-  // Site
   SITE_NAME: "COURTSIDE",
   SEASON: "2025-26",
-  DEMO_MODE: true, // shows DEMO DATA badges when true
+  // false when Supabase is connected — badges still show if tables empty
+  DEMO_MODE: false,
 
-  // Version
-  VERSION: "0.1.0"
+  VERSION: "0.2.0"
 };
 
-// Export for modules (if using type="module")
 if (typeof window !== "undefined") {
   window.COURTSIDE_CONFIG = CONFIG;
 }

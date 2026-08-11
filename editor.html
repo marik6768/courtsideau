@@ -28,18 +28,17 @@
     <div id="login-view" class="login-screen">
       <h1>Admin</h1>
       <p style="text-align:center;color:var(--text-muted);font-size:var(--text-sm);margin-bottom:var(--space-6);">
-        Demo mode: any email + password works for local testing.<br>
-        Changes save to localStorage and appear on the public site immediately.<br>
-        Connect Supabase Auth + DB for production.
+        Sign in with your Supabase admin account.<br>
+        If Auth fails, demo fallback still works for local edits.
       </p>
       <div id="login-status"></div>
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="login-email" placeholder="admin@courtside.gg" value="admin@courtside.gg">
+        <input type="email" class="form-input" id="login-email" placeholder="admin@courtside.gg" value="gehe1@yandex.ru">
       </div>
       <div class="form-group">
         <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="login-password" placeholder="••••••••" value="demo">
+        <input type="password" class="form-input" id="login-password" placeholder="••••••••" value="">
       </div>
       <button class="btn btn-primary" style="width:100%;" id="login-btn">Sign in</button>
     </div>
@@ -57,6 +56,7 @@
           <a href="#" data-section="news"><span class="nav-dot"></span>News</a>
           <a href="#" data-section="photos"><span class="nav-dot"></span>Photos</a>
           <a href="#" data-section="theme"><span class="nav-dot"></span>Theme</a>
+          <a href="#" data-section="custom"><span class="nav-dot"></span>Custom / All</a>
         </nav>
         <button class="btn btn-ghost btn-sm" style="margin-top:var(--space-6);" id="logout-btn">Sign out</button>
       </aside>
@@ -173,10 +173,40 @@
           <div id="photos-status"></div>
         
         <!-- Theme -->
+        
+        <div class="admin-section" id="section-custom">
+          <div class="admin-header">
+            <h1>Edit everything</h1>
+            <button class="btn btn-primary" data-save="custom">Save all JSON</button>
+          </div>
+          <div class="admin-card">
+            <h3>Raw site data (JSON)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem;">
+              Full control: edit any field. Invalid JSON will not save. Includes forecasts, top100, goat, news, siteContent, theme, photos.
+            </p>
+            <textarea class="form-input" id="custom_json" style="min-height:420px;font-family:var(--font-mono);font-size:12px;"></textarea>
+            <div id="custom-status"></div>
+          </div>
+          <div class="admin-card">
+            <h3>Footer text</h3>
+            <div class="form-group">
+              <label class="form-label">Footer short line</label>
+              <input class="form-input" id="footer_desc" value="Editorial NBA analytics.">
+            </div>
+          </div>
+          <div class="admin-card">
+            <h3>Add player to Top 100</h3>
+            <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="new_player_name"></div>
+            <div class="form-group"><label class="form-label">Team</label><input class="form-input" id="new_player_team" placeholder="DEN"></div>
+            <div class="form-group"><label class="form-label">Pos</label><input class="form-input" id="new_player_pos" placeholder="G"></div>
+            <button class="btn btn-ghost" type="button" id="add-player-btn">Add player</button>
+          </div>
+        </div>
+
         <div class="admin-section" id="section-theme">
           <div class="admin-header">
             <h1>Theme</h1>
-            <button class="btn btn-primary" data-save="theme">Save theme</button>
+            <button class="btn btn-primary" data-save="theme">Save theme</button></div><div id="theme-status"></div><div class="x">
           </div>
           <div class="admin-card">
             <h3>Colors (CSS variables)</h3>
@@ -204,8 +234,11 @@
     </div>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="demo.js"></script>
+  <script src="data.js"></script>
+  <script src="supabase-client.js"></script>
   <script src="ui.js"></script>
   <script>
     (function () {
@@ -223,8 +256,14 @@
         data = JSON.parse(JSON.stringify(window.COURTSIDE_DEMO || {}));
       }
 
-      function saveData() {
+      async function saveData(extra) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        if (window.COURTSIDE_DATA && window.COURTSIDE_DATA.save) {
+          const payload = extra ? { ...data, ...extra } : data;
+          const res = await window.COURTSIDE_DATA.save(payload);
+          return res;
+        }
+        return { ok: true, local: true };
       }
 
       function showStatus(id, msg, type = "success") {
@@ -232,10 +271,6 @@
         if (!el) return;
         el.innerHTML = `<div class="status-message ${type}">${msg}</div>`;
         setTimeout(() => { el.innerHTML = ""; }, 3000);
-      }
-
-      function isLoggedIn() {
-        return sessionStorage.getItem("courtside_admin") === "1";
       }
 
       function showAdmin() {
@@ -250,6 +285,14 @@
         document.getElementById("admin-view").style.display = "none";
       }
 
+      function setLoginStatus(msg, isError) {
+        const el = document.getElementById("login-status");
+        if (!el) return;
+        el.innerHTML = msg
+          ? '<div class="status-message ' + (isError ? 'error' : 'success') + '">' + msg + '</div>'
+          : '';
+      }
+
       // Nav sections
       document.querySelectorAll(".admin-nav a").forEach(link => {
         link.addEventListener("click", (e) => {
@@ -258,19 +301,43 @@
           link.classList.add("active");
           const section = link.dataset.section;
           document.querySelectorAll(".admin-section").forEach(s => s.classList.remove("active"));
-          document.getElementById("section-" + section).classList.add("active");
+          const panel = document.getElementById("section-" + section);
+          if (panel) panel.classList.add("active");
         });
       });
 
-      // Login
-      document.getElementById("login-btn").addEventListener("click", () => {
-        // Demo: accept anything. Later: Supabase auth.signInWithPassword
+      // Login via Supabase (fallback demo if no client)
+      document.getElementById("login-btn").addEventListener("click", async () => {
+        const email = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value;
+        setLoginStatus("Signing in…");
+
+        if (window.COURTSIDE_AUTH && window.COURTSIDE_SB) {
+          const { data: authData, error } = await window.COURTSIDE_AUTH.signIn(email, password);
+          if (error) {
+            setLoginStatus("Auth error: " + error.message, true);
+            return;
+          }
+          const admin = await window.COURTSIDE_AUTH.isAdmin();
+          if (!admin) {
+            setLoginStatus("Signed in, but role is not admin. Run the SQL to set role=admin in profiles.", true);
+            await window.COURTSIDE_AUTH.signOut();
+            return;
+          }
+          sessionStorage.setItem("courtside_admin", "1");
+          setLoginStatus("");
+          showAdmin();
+          return;
+        }
+
+        // Fallback local demo
         sessionStorage.setItem("courtside_admin", "1");
         showAdmin();
       });
 
-      document.getElementById("logout-btn").addEventListener("click", () => {
+      document.getElementById("logout-btn").addEventListener("click", async () => {
         sessionStorage.removeItem("courtside_admin");
+        if (window.COURTSIDE_AUTH) await window.COURTSIDE_AUTH.signOut();
         showLogin();
       });
 
@@ -389,6 +456,13 @@
       }
 
       function renderAllEditors() {
+        var cj = document.getElementById("custom_json");
+        if (cj) {
+          try { cj.value = JSON.stringify(data, null, 2); } catch (e) {}
+        }
+        var fd = document.getElementById("footer_desc");
+        if (fd && data.siteContent) fd.value = data.siteContent.footer_desc || "Editorial NBA analytics.";
+
         if (data.siteContent) {
           document.getElementById("hero_title_1").value = data.siteContent.hero_title_1 || "";
           document.getElementById("hero_title_2").value = data.siteContent.hero_title_2 || "";
@@ -483,7 +557,51 @@
             saveData();
             showStatus("photos-status", "Photo paths saved.");
           }
+
+          if (type === "custom") {
+            try {
+              var parsed = JSON.parse(document.getElementById("custom_json").value);
+              data = parsed;
+              var fd = document.getElementById("footer_desc");
+              if (fd) {
+                data.siteContent = data.siteContent || {};
+                data.siteContent.footer_desc = fd.value;
+              }
+              saveData();
+              showStatus("custom-status", "Full data saved.");
+              renderAllEditors();
+            } catch (err) {
+              showStatus("custom-status", "Invalid JSON: " + err.message, "error");
+            }
+          }
+
+          if (type === "theme") {
+            data.theme = {
+              accent: document.getElementById("theme_accent").value,
+              neon: document.getElementById("theme_neon").value,
+              cyan: document.getElementById("theme_cyan").value,
+              bg: document.getElementById("theme_bg").value
+            };
+            if (window.COURTSIDE_DATA) window.COURTSIDE_DATA.applyTheme(data.theme);
+            saveData({ theme: data.theme });
+            showStatus("theme-status", "Theme saved.");
+          }
         });
+      });
+
+      var ap = document.getElementById("add-player-btn");
+      if (ap) ap.addEventListener("click", () => {
+        data.top100 = data.top100 || [];
+        data.top100.push({
+          rank: data.top100.length + 1,
+          player: document.getElementById("new_player_name").value || "New Player",
+          team: document.getElementById("new_player_team").value || "FA",
+          pos: document.getElementById("new_player_pos").value || "G",
+          pts: 0, reb: 0, ast: 0, efficiency: 0, gi: 0, change: 0
+        });
+        saveData();
+        renderAllEditors();
+        alert("Player added — open Top 100 section to edit stats.");
       });
 
       document.getElementById("add-news").addEventListener("click", () => {
@@ -499,8 +617,22 @@
       });
 
       // Init
-      if (isLoggedIn()) showAdmin();
-      else showLogin();
+      (async function init() {
+        if (window.COURTSIDE_AUTH && window.COURTSIDE_SB) {
+          try {
+            const session = await window.COURTSIDE_AUTH.getSession();
+            if (session && await window.COURTSIDE_AUTH.isAdmin()) {
+              sessionStorage.setItem("courtside_admin", "1");
+              showAdmin();
+              return;
+            }
+          } catch (e) {
+            console.warn(e);
+          }
+        }
+        if (sessionStorage.getItem("courtside_admin") === "1") showAdmin();
+        else showLogin();
+      })();
     })();
   </script>
 </body>
