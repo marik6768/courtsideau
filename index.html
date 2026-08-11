@@ -46,6 +46,9 @@
   <main class="site-main">
     <!-- HERO -->
     <section class="hero">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
       <div class="container">
         <div class="hero-grid">
           <div>
@@ -57,13 +60,21 @@
             <p class="hero-desc">
               COURTSIDE collects statistics, rankings, forecasts and player history in one place. Numbers first. Then conclusions.
             </p>
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <div class="hero-actions">
               <a href="stats.html" class="btn btn-primary">Top 100</a>
               <a href="gi.html" class="btn btn-ghost">GOAT Index</a>
             </div>
           </div>
-          <div class="hero-image">
-            <div class="hero-image-placeholder">Hero image · replace via Admin</div>
+          <div class="hero-visual">
+            <div class="hero-image hero-image-accent">
+              <div class="hero-image-placeholder">Archive</div>
+            </div>
+            <div class="hero-image hero-image-main">
+              <div class="hero-image-placeholder">Hero · Admin</div>
+            </div>
+            <div class="hero-image hero-image-float">
+              <div class="hero-image-placeholder">GI</div>
+            </div>
           </div>
         </div>
       </div>
@@ -72,32 +83,32 @@
     <!-- MAIN SECTIONS -->
     <section class="section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
           <div class="section-label">Navigate</div>
           <h2 class="section-title">Main sections</h2>
         </div>
         <div class="sections-grid">
-          <a href="forecast.html" class="section-link">
+          <a href="forecast.html" class="section-link reveal">
             <h3>Forecasts</h3>
             <p>MVP, DPOY, ROY, MIP and Champion predictions with reasoning.</p>
           </a>
-          <a href="stats.html" class="section-link">
+          <a href="stats.html" class="section-link reveal">
             <h3>Top 100</h3>
             <p>Season rankings with stats, efficiency and GOAT Index scores.</p>
           </a>
-          <a href="gi.html" class="section-link">
+          <a href="gi.html" class="section-link reveal">
             <h3>GOAT Index</h3>
             <p>Methodology and seasonal GI scale explained.</p>
           </a>
-          <a href="goat.html" class="section-link">
+          <a href="goat.html" class="section-link reveal">
             <h3>GOAT</h3>
             <p>Historical ranking with peak, longevity and context.</p>
           </a>
-          <a href="news.html" class="section-link">
+          <a href="news.html" class="section-link reveal">
             <h3>News</h3>
             <p>Analysis, essays and editorial coverage.</p>
           </a>
-          <a href="forum.html" class="section-link">
+          <a href="forum.html" class="section-link reveal">
             <h3>Forum</h3>
             <p>Discuss rankings, trades, playoffs and more.</p>
           </a>
@@ -113,7 +124,7 @@
           <h2 class="section-title">Current Forecasts</h2>
           <p class="section-desc">Editorial projections, not betting odds. Confidence reflects current evidence strength.</p>
         </div>
-        <div class="forecast-grid" id="forecasts-grid">
+        <div class="forecast-grid" id="forecasts-grid" class="reveal">
           <!-- filled by JS -->
         </div>
         <div style="margin-top:var(--space-6);">
@@ -130,7 +141,7 @@
           <h2 class="section-title">GOAT Index</h2>
           <p class="section-desc">GI is COURTSIDE’s proprietary scale for comparing players. It is not official NBA statistics and does not replace traditional metrics.</p>
         </div>
-        <div class="gi-components" id="gi-components">
+        <div class="gi-components" id="gi-components" class="reveal">
           <!-- filled by JS -->
         </div>
         <div class="disclaimer" style="margin-top:var(--space-8);">
@@ -149,7 +160,7 @@
           <div class="section-label">Editorial</div>
           <h2 class="section-title">Latest Analysis</h2>
         </div>
-        <div class="news-grid" id="news-grid">
+        <div class="news-grid" id="news-grid" class="reveal">
           <!-- filled by JS -->
         </div>
         <div style="margin-top:var(--space-8);">

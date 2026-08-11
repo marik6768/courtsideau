@@ -1,11 +1,11 @@
 /**
  * COURTSIDE — Common UI utilities
+ * Mobile menu · active nav · scroll reveal · header state
  */
 
 (function () {
   "use strict";
 
-  // Mobile menu
   function initMobileMenu() {
     const toggle = document.querySelector(".menu-toggle");
     const mobileNav = document.querySelector(".nav-mobile");
@@ -32,7 +32,6 @@
       document.body.style.overflow = isOpen ? "hidden" : "";
     });
 
-    // Close on link click
     mobileNav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => {
         mobileNav.classList.remove("open");
@@ -43,7 +42,6 @@
     });
   }
 
-  // Set active nav link
   function setActiveNav() {
     const path = window.location.pathname.split("/").pop() || "index.html";
     document.querySelectorAll(".nav-desktop a, .nav-mobile a").forEach((link) => {
@@ -54,7 +52,6 @@
     });
   }
 
-  // Demo badge helper
   function showDemoBadges() {
     if (window.COURTSIDE_CONFIG && window.COURTSIDE_CONFIG.DEMO_MODE) {
       document.querySelectorAll("[data-demo]").forEach((el) => {
@@ -63,10 +60,53 @@
     }
   }
 
-  // Init
+  function initHeaderScroll() {
+    const header = document.querySelector(".site-header");
+    if (!header) return;
+    const onScroll = () => {
+      header.classList.toggle("scrolled", window.scrollY > 12);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  function initReveal() {
+    const els = document.querySelectorAll(".reveal");
+    if (!els.length) return;
+
+    if (!("IntersectionObserver" in window)) {
+      els.forEach((el) => el.classList.add("visible"));
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+    );
+
+    els.forEach((el, i) => {
+      if (!el.classList.contains("reveal-delay-1") &&
+          !el.classList.contains("reveal-delay-2") &&
+          !el.classList.contains("reveal-delay-3")) {
+        const d = (i % 5) + 1;
+        el.classList.add("reveal-delay-" + Math.min(d, 5));
+      }
+      io.observe(el);
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     initMobileMenu();
     setActiveNav();
     showDemoBadges();
+    initHeaderScroll();
+    initReveal();
   });
 })();
