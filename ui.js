@@ -137,7 +137,7 @@
     showDemoBadges();
     initHeaderScroll();
     initReveal();
-    injectSideDecor();
+    /* injectSideDecor disabled */
   });
 
   window.COURTSIDE_UI = {
