@@ -420,21 +420,15 @@ table { border-collapse: collapse; width: 100%; }
 }
 .hero-title span {
   display: block;
-  opacity: 1;
-  transform: translateY(0);
-  animation: titleIn 0.7s var(--ease-out) both;
+  opacity: 1 !important;
+  transform: none;
+  animation: none;
+  color: var(--text-primary);
 }
-.hero-title span:nth-child(1) { animation-delay: 0.05s; }
-.hero-title span:nth-child(2) { animation-delay: 0.12s; }
-.hero-title span:nth-child(3) { animation-delay: 0.2s; }
-.hero-title span:nth-child(1) { animation-delay: 0.1s; }
-.hero-title span:nth-child(2) { animation-delay: 0.22s; }
 .hero-title span:nth-child(3) {
-  animation-delay: 0.34s;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--neon) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent);
+  background: none;
+  -webkit-text-fill-color: unset;
 }
 @keyframes titleIn {
   from { opacity: 0; transform: translateY(16px); }
@@ -447,15 +441,15 @@ table { border-collapse: collapse; width: 100%; }
   max-width: 420px;
   margin-bottom: var(--space-8);
   line-height: 1.7;
-  opacity: 1;
-  animation: titleIn 0.6s var(--ease-out) 0.25s both;
+  opacity: 1 !important;
+  animation: none;
 }
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-  opacity: 1;
-  animation: titleIn 0.6s var(--ease-out) 0.35s both;
+  opacity: 1 !important;
+  animation: none;
 }
 
 /* Chaotic 3D magazine stack */
@@ -1160,13 +1154,22 @@ select option {
 
 /* ========== REVEAL / MOTION ========== */
 .reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+  opacity: 1;
+  transform: none;
 }
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+}
+/* optional soft entrance when JS adds .will-reveal before show */
+.reveal.will-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.reveal.will-reveal.visible {
+  opacity: 1;
+  transform: none;
 }
 
 /* 3D tilt helper (JS can enhance) */

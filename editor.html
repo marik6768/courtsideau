@@ -28,8 +28,8 @@
     <div id="login-view" class="login-screen">
       <h1>Admin</h1>
       <p style="text-align:center;color:var(--text-muted);font-size:var(--text-sm);margin-bottom:var(--space-6);">
-        Sign in with your Supabase admin account.<br>
-        If Auth fails, demo fallback still works for local edits.
+        Supabase: email + пароль пользователя.<br>
+        <strong style="color:var(--accent)">Локальный вход без Supabase: пароль <code>demo</code></strong>
       </p>
       <div id="login-status"></div>
       <div class="form-group">
@@ -306,31 +306,51 @@
         });
       });
 
-      // Login via Supabase (fallback demo if no client)
+      // Login: try Supabase, then local demo
       document.getElementById("login-btn").addEventListener("click", async () => {
         const email = document.getElementById("login-email").value.trim();
         const password = document.getElementById("login-password").value;
         setLoginStatus("Signing in…");
 
-        if (window.COURTSIDE_AUTH && window.COURTSIDE_SB) {
-          const { data: authData, error } = await window.COURTSIDE_AUTH.signIn(email, password);
-          if (error) {
-            setLoginStatus("Auth error: " + error.message, true);
-            return;
-          }
-          const admin = await window.COURTSIDE_AUTH.isAdmin();
-          if (!admin) {
-            setLoginStatus("Signed in, but role is not admin. Run the SQL to set role=admin in profiles.", true);
-            await window.COURTSIDE_AUTH.signOut();
-            return;
-          }
+        // Explicit local demo password
+        if (password === "demo" || password === "admin") {
           sessionStorage.setItem("courtside_admin", "1");
-          setLoginStatus("");
+          setLoginStatus("Local demo mode (password demo/admin).", false);
           showAdmin();
           return;
         }
 
-        // Fallback local demo
+        if (window.COURTSIDE_AUTH && window.COURTSIDE_SB) {
+          try {
+            const { data: authData, error } = await window.COURTSIDE_AUTH.signIn(email, password);
+            if (error) {
+              setLoginStatus(
+                "Supabase: " + error.message +
+                " — Для локального входа введи пароль: demo",
+                true
+              );
+              return;
+            }
+            const admin = await window.COURTSIDE_AUTH.isAdmin();
+            if (!admin) {
+              setLoginStatus(
+                "Вход ок, но в profiles нет role=admin. Пока открываю demo-админку. Выполни SQL с UUID.",
+                true
+              );
+              sessionStorage.setItem("courtside_admin", "1");
+              showAdmin();
+              return;
+            }
+            sessionStorage.setItem("courtside_admin", "1");
+            setLoginStatus("");
+            showAdmin();
+            return;
+          } catch (e) {
+            setLoginStatus("Ошибка: " + e + " — пароль demo для локального входа", true);
+            return;
+          }
+        }
+
         sessionStorage.setItem("courtside_admin", "1");
         showAdmin();
       });
