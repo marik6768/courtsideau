@@ -49,13 +49,14 @@
       <aside class="admin-sidebar">
         <h2>Editor</h2>
         <nav class="admin-nav">
-          <a href="#" data-section="home" class="active">Home content</a>
-          <a href="#" data-section="forecasts">Forecasts</a>
-          <a href="#" data-section="top100">Top 100</a>
-          <a href="#" data-section="goat">GOAT</a>
-          <a href="#" data-section="gi">GI text</a>
-          <a href="#" data-section="news">News</a>
-          <a href="#" data-section="photos">Photos</a>
+          <a href="#" data-section="home" class="active"><span class="nav-dot"></span>Home</a>
+          <a href="#" data-section="forecasts"><span class="nav-dot"></span>Forecasts</a>
+          <a href="#" data-section="top100"><span class="nav-dot"></span>Top 100</a>
+          <a href="#" data-section="goat"><span class="nav-dot"></span>GOAT</a>
+          <a href="#" data-section="gi"><span class="nav-dot"></span>GI text</a>
+          <a href="#" data-section="news"><span class="nav-dot"></span>News</a>
+          <a href="#" data-section="photos"><span class="nav-dot"></span>Photos</a>
+          <a href="#" data-section="theme"><span class="nav-dot"></span>Theme</a>
         </nav>
         <button class="btn btn-ghost btn-sm" style="margin-top:var(--space-6);" id="logout-btn">Sign out</button>
       </aside>
@@ -170,7 +171,35 @@
           </div>
           <button class="btn btn-primary" data-save="photos">Save paths</button>
           <div id="photos-status"></div>
+        
+        <!-- Theme -->
+        <div class="admin-section" id="section-theme">
+          <div class="admin-header">
+            <h1>Theme</h1>
+            <button class="btn btn-primary" data-save="theme">Save theme</button>
+          </div>
+          <div class="admin-card">
+            <h3>Colors (CSS variables)</h3>
+            <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem;">These save to localStorage for now. With Supabase they will drive the whole site.</p>
+            <div class="form-group">
+              <label class="form-label">Accent (crimson)</label>
+              <input class="form-input" type="color" id="theme_accent" value="#c41e3a" style="height:44px;padding:4px;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Neon (violet)</label>
+              <input class="form-input" type="color" id="theme_neon" value="#a855f7" style="height:44px;padding:4px;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Secondary neon (cyan)</label>
+              <input class="form-input" type="color" id="theme_cyan" value="#22d3ee" style="height:44px;padding:4px;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Background</label>
+              <input class="form-input" type="color" id="theme_bg" value="#070708" style="height:44px;padding:4px;">
+            </div>
+          </div>
         </div>
+</div>
       </div>
     </div>
   </main>

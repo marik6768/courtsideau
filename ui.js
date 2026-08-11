@@ -101,7 +101,8 @@
     });
   }
 
-  function injectSideDecor() {
+  function injectSideDecor() { return; // disabled
+    if (false) {
     if (document.querySelector(".side-decor")) return;
     const left = document.createElement("div");
     left.className = "side-decor side-decor-left";
@@ -137,7 +138,7 @@
     showDemoBadges();
     initHeaderScroll();
     initReveal();
-    /* injectSideDecor disabled */
+    // side decor removed
   });
 
   window.COURTSIDE_UI = {
