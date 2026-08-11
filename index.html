@@ -13,8 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  
-  </head>
+</head>
 <body>
   <header class="site-header">
     <div class="header-inner">
@@ -29,7 +28,9 @@
         <a href="forum.html">Forum</a>
         <a href="editor.html" class="nav-admin">Admin</a>
       </nav>
-      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"></button>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
     </div>
     <nav class="nav-mobile" aria-label="Mobile">
       <a href="index.html">Home</a>
@@ -52,16 +53,17 @@
       <div class="container">
         <div class="hero-grid">
           <div>
+            <div class="demo-badge" style="margin-bottom:1.25rem">DEMO DATA</div>
             <h1 class="hero-title">
               <span>NBA.</span>
               <span>Facts.</span>
               <span>Context.</span>
             </h1>
             <p class="hero-desc">
-              COURTSIDE collects statistics, rankings, forecasts and player history in one place. Numbers first. Then conclusions.
+              Statistics, rankings, forecasts and player history in one editorial space. Numbers first. Then conclusions.
             </p>
             <div class="hero-actions">
-              <a href="stats.html" class="btn btn-primary">Top 100</a>
+              <a href="stats.html" class="btn btn-primary">Explore Top 100</a>
               <a href="gi.html" class="btn btn-ghost">GOAT Index</a>
             </div>
           </div>
@@ -70,7 +72,7 @@
               <div class="hero-image-placeholder">Archive</div>
             </div>
             <div class="hero-image hero-image-main">
-              <div class="hero-image-placeholder">Hero · Admin</div>
+              <div class="hero-image-placeholder">Hero</div>
             </div>
             <div class="hero-image hero-image-float">
               <div class="hero-image-placeholder">GI</div>
@@ -91,26 +93,32 @@
           <a href="forecast.html" class="section-link reveal">
             <h3>Forecasts</h3>
             <p>MVP, DPOY, ROY, MIP and Champion predictions with reasoning.</p>
+            <span class="link-arrow">→</span>
           </a>
           <a href="stats.html" class="section-link reveal">
             <h3>Top 100</h3>
             <p>Season rankings with stats, efficiency and GOAT Index scores.</p>
+            <span class="link-arrow">→</span>
           </a>
           <a href="gi.html" class="section-link reveal">
             <h3>GOAT Index</h3>
             <p>Methodology and seasonal GI scale explained.</p>
+            <span class="link-arrow">→</span>
           </a>
           <a href="goat.html" class="section-link reveal">
             <h3>GOAT</h3>
             <p>Historical ranking with peak, longevity and context.</p>
+            <span class="link-arrow">→</span>
           </a>
           <a href="news.html" class="section-link reveal">
             <h3>News</h3>
             <p>Analysis, essays and editorial coverage.</p>
+            <span class="link-arrow">→</span>
           </a>
           <a href="forum.html" class="section-link reveal">
             <h3>Forum</h3>
             <p>Discuss rankings, trades, playoffs and more.</p>
+            <span class="link-arrow">→</span>
           </a>
         </div>
       </div>
@@ -119,92 +127,73 @@
     <!-- CURRENT FORECASTS -->
     <section class="section" style="background:var(--bg-secondary);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
       <div class="container">
-        <div class="section-header">
-          <div class="section-label">Season <span id="season-label">2025-26</span></div>
+        <div class="section-header reveal">
+          <div class="section-label">Season</div>
           <h2 class="section-title">Current Forecasts</h2>
-          <p class="section-desc">Editorial projections, not betting odds. Confidence reflects current evidence strength.</p>
         </div>
-        <div class="forecast-grid" id="forecasts-grid" class="reveal">
-          <!-- filled by JS -->
-        </div>
-        <div style="margin-top:var(--space-6);">
-          <a href="forecast.html" class="btn btn-ghost">All forecasts →</a>
+        <div class="forecast-grid" id="home-forecasts"></div>
+        <div style="margin-top:2rem" class="reveal">
+          <a href="forecast.html" class="btn btn-neon">All forecasts →</a>
         </div>
       </div>
     </section>
 
-    <!-- GI INTRO -->
+    <!-- GI TEASER -->
     <section class="section">
       <div class="container">
-        <div class="section-header">
-          <div class="section-label">System</div>
+        <div class="section-header reveal">
+          <div class="section-label">Methodology</div>
           <h2 class="section-title">GOAT Index</h2>
-          <p class="section-desc">GI is COURTSIDE’s proprietary scale for comparing players. It is not official NBA statistics and does not replace traditional metrics.</p>
         </div>
-        <div class="gi-components" id="gi-components" class="reveal">
-          <!-- filled by JS -->
-        </div>
-        <div class="disclaimer" style="margin-top:var(--space-8);">
-          GI combines production, efficiency, creation, defense, consistency and winning impact. Historical rankings add peak, longevity, championships and era context. Always interpret with the accompanying explanation.
-        </div>
-        <div style="margin-top:var(--space-6);">
-          <a href="gi.html" class="btn btn-ghost">Full methodology →</a>
-        </div>
+        <p class="text-secondary reveal" style="max-width:540px;margin-bottom:2rem;font-size:1.05rem">
+          Proprietary scale combining production, efficiency, creation, defense, consistency and winning. Not official NBA stats — editorial analysis.
+        </p>
+        <a href="gi.html" class="btn btn-primary reveal">Read methodology</a>
       </div>
     </section>
 
-    <!-- LATEST ANALYSIS -->
-    <section class="section" style="border-top:1px solid var(--border);">
+    <!-- LATEST NEWS -->
+    <section class="section" style="background:var(--bg-secondary);border-top:1px solid var(--border);">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header reveal">
           <div class="section-label">Editorial</div>
           <h2 class="section-title">Latest Analysis</h2>
         </div>
-        <div class="news-grid" id="news-grid" class="reveal">
-          <!-- filled by JS -->
+        <div class="news-grid" id="home-news"></div>
+        <div style="margin-top:2rem" class="reveal">
+          <a href="news.html" class="btn btn-ghost">All news →</a>
         </div>
-        <div style="margin-top:var(--space-8);">
-          <a href="news.html" class="btn btn-ghost">All articles →</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- FORUM TEASER -->
-    <section class="section" style="background:var(--bg-secondary);border-top:1px solid var(--border);">
-      <div class="container" style="text-align:center;max-width:560px;">
-        <div class="section-label">Community</div>
-        <h2 class="section-title" style="margin-bottom:var(--space-4);">COURTSIDE Forum</h2>
-        <p class="section-desc" style="margin:0 auto var(--space-6);">Discuss rankings, trades, playoff scenarios and the GOAT debate.</p>
-        <a href="forum.html" class="btn btn-primary">Enter Forum</a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <div class="logo">COURT<span>SIDE</span></div>
-        <p>NBA analytics, proprietary GOAT Index and editorial coverage. Numbers first. Then conclusions.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Sections</h4>
-          <a href="forecast.html">Forecasts</a>
-          <a href="stats.html">Top 100</a>
-          <a href="gi.html">GOAT Index</a>
-          <a href="goat.html">GOAT</a>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">COURT<span>SIDE</span></div>
+          <p class="footer-desc">Editorial NBA analytics. Numbers first. Then conclusions.</p>
         </div>
-        <div class="footer-col">
-          <h4>More</h4>
-          <a href="news.html">News</a>
-          <a href="forum.html">Forum</a>
-          <a href="editor.html">Admin</a>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Sections</h4>
+            <a href="stats.html">Top 100</a>
+            <a href="forecast.html">Forecasts</a>
+            <a href="gi.html">GOAT Index</a>
+            <a href="goat.html">GOAT</a>
+          </div>
+          <div class="footer-col">
+            <h4>More</h4>
+            <a href="news.html">News</a>
+            <a href="forum.html">Forum</a>
+            <a href="editor.html">Admin</a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 COURTSIDE</span>
-      <span class="demo-badge" data-demo style="display:none;">DEMO DATA</span>
+      <div class="footer-bottom">
+        <span>© COURTSIDE · Editorial project</span>
+        <span class="demo-badge">DEMO DATA</span>
+      </div>
     </div>
   </footer>
 
@@ -213,58 +202,36 @@
   <script src="data.js"></script>
   <script src="ui.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const D = window.COURTSIDE_DATA.get();
-      if (!D) return;
-
-      const seasonEl = document.getElementById("season-label");
-      if (seasonEl) seasonEl.textContent = D.season || "2025-26";
-
-      if (D.siteContent) {
-        const titles = document.querySelectorAll(".hero-title span");
-        if (titles[0] && D.siteContent.hero_title_1) titles[0].textContent = D.siteContent.hero_title_1;
-        if (titles[1] && D.siteContent.hero_title_2) titles[1].textContent = D.siteContent.hero_title_2;
-        if (titles[2] && D.siteContent.hero_title_3) titles[2].textContent = D.siteContent.hero_title_3;
-        const desc = document.querySelector(".hero-desc");
-        if (desc && D.siteContent.hero_desc) desc.textContent = D.siteContent.hero_desc;
-      }
-
-      const fGrid = document.getElementById("forecasts-grid");
-      if (fGrid && D.forecasts) {
-        fGrid.innerHTML = D.forecasts.map(f => `
-          <a href="forecast.html" class="forecast-card" style="display:block;color:inherit;">
+    document.addEventListener('DOMContentLoaded', () => {
+      const data = window.COURTSIDE_DATA.get();
+      const fEl = document.getElementById('home-forecasts');
+      if (fEl && data.forecasts) {
+        fEl.innerHTML = data.forecasts.slice(0, 4).map(f => `
+          <article class="forecast-card reveal">
             <div class="forecast-category">${f.category}</div>
             <div class="forecast-player">${f.player}</div>
-            <div class="forecast-confidence">${f.confidence}% confidence</div>
-          </a>
-        `).join("");
-      }
-
-      const giGrid = document.getElementById("gi-components");
-      if (giGrid && D.giComponents) {
-        giGrid.innerHTML = D.giComponents.map(c => `
-          <div class="gi-component">
-            <div class="gi-component-name">${c.name}</div>
-            <div class="gi-component-desc">${c.desc}</div>
-            <div class="gi-component-weight">${c.weight}</div>
-          </div>
-        `).join("");
-      }
-
-      const nGrid = document.getElementById("news-grid");
-      if (nGrid && D.news) {
-        nGrid.innerHTML = D.news.map(n => `
-          <article class="news-card">
-            <div class="news-card-image">
-              <div class="hero-image-placeholder" style="height:100%;">Image</div>
+            <div class="forecast-confidence">
+              <div class="confidence-bar"><div class="confidence-fill" style="width:${f.confidence}%"></div></div>
+              <span class="confidence-value">${f.confidence}%</span>
             </div>
-            <div class="news-category">${n.category}</div>
-            <h3 class="news-title">${n.title}</h3>
-            <p class="news-excerpt">${n.excerpt}</p>
-            <div class="news-date">${n.date}</div>
+            <p class="forecast-explain">${f.explanation || ''}</p>
           </article>
-        `).join("");
+        `).join('');
       }
+      const nEl = document.getElementById('home-news');
+      if (nEl && data.news) {
+        nEl.innerHTML = data.news.slice(0, 3).map(n => `
+          <article class="news-card reveal">
+            <div class="news-cover">${n.category || 'Essay'}</div>
+            <div class="news-body">
+              <div class="news-cat">${n.category || 'Analysis'}</div>
+              <h3 class="news-title">${n.title}</h3>
+              <p class="news-excerpt">${n.excerpt || ''}</p>
+            </div>
+          </article>
+        `).join('');
+      }
+      if (window.COURTSIDE_UI) window.COURTSIDE_UI.initReveal();
     });
   </script>
 </body>
