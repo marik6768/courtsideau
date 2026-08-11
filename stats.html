@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COURTSIDE · Top 100</title>
+  <meta name="description" content="COURTSIDE Top 100 players with statistics and GOAT Index scores.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  </head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">COURT<span>SIDE</span></a>
+      <nav class="nav-desktop" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="forecast.html">Forecasts</a>
+        <a href="stats.html" class="active">Stats</a>
+        <a href="gi.html">GI</a>
+        <a href="goat.html">GOAT</a>
+        <a href="news.html">News</a>
+        <a href="forum.html">Forum</a>
+        <a href="editor.html" class="nav-admin">Admin</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"></button>
+    </div>
+    <nav class="nav-mobile" aria-label="Mobile">
+      <a href="index.html">Home</a>
+      <a href="forecast.html">Forecasts</a>
+      <a href="stats.html">Stats</a>
+      <a href="gi.html">GI</a>
+      <a href="goat.html">GOAT</a>
+      <a href="news.html">News</a>
+      <a href="forum.html">Forum</a>
+      <a href="editor.html" class="nav-admin">Admin</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <section class="section">
+      <div class="container-wide container">
+        <div class="section-header">
+          <div class="section-label">Season rankings</div>
+          <h1 class="section-title">Top 100</h1>
+          <p class="section-desc">Players ranked by GOAT Index with core counting stats and efficiency. Demo set shows top 15.</p>
+          <div class="demo-badge" data-demo style="display:none;margin-top:var(--space-4);">DEMO DATA</div>
+        </div>
+
+        <div class="toolbar">
+          <input type="search" class="search-input" id="search" placeholder="Search player...">
+          <select class="select" id="filter-pos">
+            <option value="">All positions</option>
+            <option value="G">G</option>
+            <option value="F">F</option>
+            <option value="C">C</option>
+            <option value="G-F">G-F</option>
+          </select>
+          <select class="select" id="filter-team">
+            <option value="">All teams</option>
+          </select>
+          <select class="select" id="sort-by">
+            <option value="rank">Sort: Rank</option>
+            <option value="gi">Sort: GI</option>
+            <option value="pts">Sort: PTS</option>
+            <option value="reb">Sort: REB</option>
+            <option value="ast">Sort: AST</option>
+            <option value="efficiency">Sort: Efficiency</option>
+          </select>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table" id="top100-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>±</th>
+                <th>Player</th>
+                <th>Team</th>
+                <th>Pos</th>
+                <th>PTS</th>
+                <th>REB</th>
+                <th>AST</th>
+                <th>EFF</th>
+                <th>GI</th>
+              </tr>
+            </thead>
+            <tbody id="top100-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">COURT<span>SIDE</span></div>
+        <p>NBA analytics, proprietary GOAT Index and editorial coverage. Numbers first. Then conclusions.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Sections</h4>
+          <a href="forecast.html">Forecasts</a>
+          <a href="stats.html">Top 100</a>
+          <a href="gi.html">GOAT Index</a>
+          <a href="goat.html">GOAT</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="news.html">News</a>
+          <a href="forum.html">Forum</a>
+          <a href="editor.html">Admin</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 COURTSIDE</span>
+      <span class="demo-badge" data-demo style="display:none;">DEMO DATA</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="demo.js"></script>
+  <script src="data.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const D = window.COURTSIDE_DATA.get();
+      if (!D || !D.top100) return;
+
+      let data = [...D.top100];
+
+      const teams = [...new Set(data.map(p => p.team))].sort();
+      const teamSelect = document.getElementById("filter-team");
+      teams.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = t;
+        teamSelect.appendChild(opt);
+      });
+
+      function rankChangeHTML(change) {
+        if (change > 0) return `<span class="rank-change up">↑ ${change}</span>`;
+        if (change < 0) return `<span class="rank-change down">↓ ${Math.abs(change)}</span>`;
+        return `<span class="rank-change">—</span>`;
+      }
+
+      function render(rows) {
+        const tbody = document.getElementById("top100-body");
+        tbody.innerHTML = rows.map(p => `
+          <tr>
+            <td class="rank">${p.rank}</td>
+            <td>${rankChangeHTML(p.change)}</td>
+            <td class="player-name"><a href="player.html?name=${encodeURIComponent(p.player)}" style="color:inherit;border-bottom:1px solid transparent;transition:border-color .2s;">${p.player}</a></td>
+            <td class="stat">${p.team}</td>
+            <td class="stat">${p.pos}</td>
+            <td class="stat">${Number(p.pts).toFixed(1)}</td>
+            <td class="stat">${Number(p.reb).toFixed(1)}</td>
+            <td class="stat">${Number(p.ast).toFixed(1)}</td>
+            <td class="stat">${Number(p.efficiency).toFixed(1)}</td>
+            <td class="gi-score">${Number(p.gi).toFixed(1)}</td>
+          </tr>
+        `).join("");
+      }
+
+      function applyFilters() {
+        const q = document.getElementById("search").value.toLowerCase().trim();
+        const pos = document.getElementById("filter-pos").value;
+        const team = document.getElementById("filter-team").value;
+        const sort = document.getElementById("sort-by").value;
+
+        let filtered = data.filter(p => {
+          if (q && !p.player.toLowerCase().includes(q)) return false;
+          if (pos && p.pos !== pos) return false;
+          if (team && p.team !== team) return false;
+          return true;
+        });
+
+        if (sort === "gi") filtered.sort((a, b) => b.gi - a.gi);
+        else if (sort === "pts") filtered.sort((a, b) => b.pts - a.pts);
+        else if (sort === "reb") filtered.sort((a, b) => b.reb - a.reb);
+        else if (sort === "ast") filtered.sort((a, b) => b.ast - a.ast);
+        else if (sort === "efficiency") filtered.sort((a, b) => b.efficiency - a.efficiency);
+        else filtered.sort((a, b) => a.rank - b.rank);
+
+        render(filtered);
+      }
+
+      document.getElementById("search").addEventListener("input", applyFilters);
+      document.getElementById("filter-pos").addEventListener("change", applyFilters);
+      document.getElementById("filter-team").addEventListener("change", applyFilters);
+      document.getElementById("sort-by").addEventListener("change", applyFilters);
+
+      render(data);
+    });
+  </script>
+</body>
+</html>

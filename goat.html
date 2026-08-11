@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COURTSIDE · GOAT</title>
+  <meta name="description" content="COURTSIDE historical GOAT Index ranking with peak, longevity, winning and era context.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  </head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">COURT<span>SIDE</span></a>
+      <nav class="nav-desktop" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="forecast.html">Forecasts</a>
+        <a href="stats.html">Stats</a>
+        <a href="gi.html">GI</a>
+        <a href="goat.html" class="active">GOAT</a>
+        <a href="news.html">News</a>
+        <a href="forum.html">Forum</a>
+        <a href="editor.html" class="nav-admin">Admin</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"></button>
+    </div>
+    <nav class="nav-mobile" aria-label="Mobile">
+      <a href="index.html">Home</a>
+      <a href="forecast.html">Forecasts</a>
+      <a href="stats.html">Stats</a>
+      <a href="gi.html">GI</a>
+      <a href="goat.html">GOAT</a>
+      <a href="news.html">News</a>
+      <a href="forum.html">Forum</a>
+      <a href="editor.html" class="nav-admin">Admin</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Historical</div>
+          <h1 class="section-title">GOAT Index</h1>
+          <p class="section-desc">All-time ranking built from peak, longevity, winning, playoff impact and era context. Explanation matters more than the number alone.</p>
+          <div class="demo-badge" data-demo style="display:none;margin-top:var(--space-4);">DEMO DATA</div>
+        </div>
+
+        <div class="disclaimer">
+          This is an authorial ranking. Different weighting of peak vs longevity or championships will produce different orders. The accompanying text is the primary argument.
+        </div>
+
+        <div id="goat-list" style="display:flex;flex-direction:column;gap:var(--space-6);margin-top:var(--space-10);">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">COURT<span>SIDE</span></div>
+        <p>NBA analytics, proprietary GOAT Index and editorial coverage. Numbers first. Then conclusions.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Sections</h4>
+          <a href="forecast.html">Forecasts</a>
+          <a href="stats.html">Top 100</a>
+          <a href="gi.html">GOAT Index</a>
+          <a href="goat.html">GOAT</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="news.html">News</a>
+          <a href="forum.html">Forum</a>
+          <a href="editor.html">Admin</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 COURTSIDE</span>
+      <span class="demo-badge" data-demo style="display:none;">DEMO DATA</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="demo.js"></script>
+  <script src="data.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const D = window.COURTSIDE_DATA.get();
+      if (!D) return;
+
+      document.getElementById("goat-list").innerHTML = (D.goat || []).map(g => `
+        <article class="card" style="padding:var(--space-8);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-4);margin-bottom:var(--space-5);">
+            <div style="display:flex;align-items:baseline;gap:var(--space-4);">
+              <span style="font-size:var(--text-sm);color:var(--text-muted);font-variant-numeric:tabular-nums;">#${g.rank}</span>
+              <h2 style="font-family:var(--font-serif);font-size:var(--text-2xl);font-weight:400;">${g.player}</h2>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:var(--text-xs);text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);">GI</div>
+              <div style="font-size:var(--text-3xl);font-weight:600;color:var(--gold);font-variant-numeric:tabular-nums;">${g.gi.toFixed(1)}</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:var(--space-4);margin-bottom:var(--space-5);">
+            <div><div style="font-size:var(--text-xs);color:var(--text-muted);">Peak</div><div style="font-weight:500;">${g.peak}</div></div>
+            <div><div style="font-size:var(--text-xs);color:var(--text-muted);">Longevity</div><div style="font-weight:500;">${g.longevity}</div></div>
+            <div><div style="font-size:var(--text-xs);color:var(--text-muted);">Winning</div><div style="font-weight:500;">${g.winning}</div></div>
+            <div><div style="font-size:var(--text-xs);color:var(--text-muted);">Playoff</div><div style="font-weight:500;">${g.playoff}</div></div>
+            <div><div style="font-size:var(--text-xs);color:var(--text-muted);">Era</div><div style="font-weight:500;">${g.era}</div></div>
+          </div>
+          <p style="font-size:var(--text-sm);color:var(--text-secondary);line-height:1.65;">${g.explanation}</p>
+        </article>
+      `).join("");
+    });
+  </script>
+</body>
+</html>

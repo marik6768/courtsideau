@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COURTSIDE · Admin</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">COURT<span>SIDE</span></a>
+      <nav class="nav-desktop" aria-label="Main">
+        <a href="index.html">← Back to site</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"></button>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <!-- LOGIN (shown when not authenticated) -->
+    <div id="login-view" class="login-screen">
+      <h1>Admin</h1>
+      <p style="text-align:center;color:var(--text-muted);font-size:var(--text-sm);margin-bottom:var(--space-6);">
+        Demo mode: any email + password works for local testing.<br>
+        Changes save to localStorage and appear on the public site immediately.<br>
+        Connect Supabase Auth + DB for production.
+      </p>
+      <div id="login-status"></div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="login-email" placeholder="admin@courtside.gg" value="admin@courtside.gg">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-password" placeholder="••••••••" value="demo">
+      </div>
+      <button class="btn btn-primary" style="width:100%;" id="login-btn">Sign in</button>
+    </div>
+
+    <!-- ADMIN PANEL (shown after login) -->
+    <div id="admin-view" class="admin-layout" style="display:none;">
+      <aside class="admin-sidebar">
+        <h2>Editor</h2>
+        <nav class="admin-nav">
+          <a href="#" data-section="home" class="active">Home content</a>
+          <a href="#" data-section="forecasts">Forecasts</a>
+          <a href="#" data-section="top100">Top 100</a>
+          <a href="#" data-section="goat">GOAT</a>
+          <a href="#" data-section="gi">GI text</a>
+          <a href="#" data-section="news">News</a>
+          <a href="#" data-section="photos">Photos</a>
+        </nav>
+        <button class="btn btn-ghost btn-sm" style="margin-top:var(--space-6);" id="logout-btn">Sign out</button>
+      </aside>
+
+      <div class="admin-content">
+        <!-- Home -->
+        <div class="admin-section active" id="section-home">
+          <div class="admin-header">
+            <h1>Home content</h1>
+            <button class="btn btn-primary" data-save="home">Save</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hero line 1</label>
+            <input class="form-input" id="hero_title_1" value="NBA.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hero line 2</label>
+            <input class="form-input" id="hero_title_2" value="Facts.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hero line 3</label>
+            <input class="form-input" id="hero_title_3" value="Context.">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hero description</label>
+            <textarea class="form-textarea" id="hero_desc">COURTSIDE collects statistics, rankings, forecasts and player history in one place. Numbers first. Then conclusions.</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Season</label>
+            <input class="form-input" id="season" value="2025-26">
+          </div>
+          <div id="home-status"></div>
+        </div>
+
+        <!-- Forecasts -->
+        <div class="admin-section" id="section-forecasts">
+          <div class="admin-header">
+            <h1>Forecasts</h1>
+            <button class="btn btn-primary" data-save="forecasts">Save</button>
+          </div>
+          <div id="forecasts-editor"></div>
+          <div id="forecasts-status"></div>
+        </div>
+
+        <!-- Top 100 -->
+        <div class="admin-section" id="section-top100">
+          <div class="admin-header">
+            <h1>Top 100</h1>
+            <button class="btn btn-primary" data-save="top100">Save</button>
+          </div>
+          <p class="text-secondary" style="margin-bottom:var(--space-6);font-size:var(--text-sm);">
+            Edit player rows. In production this will write to Supabase. Demo saves to localStorage.
+          </p>
+          <div id="top100-editor" style="overflow-x:auto;"></div>
+          <div id="top100-status"></div>
+        </div>
+
+        <!-- GOAT -->
+        <div class="admin-section" id="section-goat">
+          <div class="admin-header">
+            <h1>GOAT ranking</h1>
+            <button class="btn btn-primary" data-save="goat">Save</button>
+          </div>
+          <div id="goat-editor"></div>
+          <div id="goat-status"></div>
+        </div>
+
+        <!-- GI text -->
+        <div class="admin-section" id="section-gi">
+          <div class="admin-header">
+            <h1>GI description</h1>
+            <button class="btn btn-primary" data-save="gi">Save</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Intro text</label>
+            <textarea class="form-textarea" id="gi_intro">GI is COURTSIDE’s proprietary scale for comparing players across seasons and eras. It is not official NBA statistics.</textarea>
+          </div>
+          <div id="gi-status"></div>
+        </div>
+
+        <!-- News -->
+        <div class="admin-section" id="section-news">
+          <div class="admin-header">
+            <h1>News</h1>
+            <button class="btn btn-primary" data-save="news">Save</button>
+          </div>
+          <p class="text-secondary" style="margin-bottom:var(--space-4);font-size:var(--text-sm);">Create / edit / remove articles. Full rich editor later.</p>
+          <div id="news-editor"></div>
+          <button class="btn btn-ghost" id="add-news" style="margin-top:var(--space-4);">+ Add article</button>
+          <div id="news-status"></div>
+        </div>
+
+        <!-- Photos -->
+        <div class="admin-section" id="section-photos">
+          <div class="admin-header">
+            <h1>Photos</h1>
+          </div>
+          <p class="text-secondary" style="font-size:var(--text-sm);margin-bottom:var(--space-6);">
+            Image upload will use Supabase Storage bucket <code>site-images</code>. For now, place files in <code>assets/images/</code> and reference paths.
+          </p>
+          <div class="form-group">
+            <label class="form-label">Hero image path</label>
+            <input class="form-input" id="photo_hero" placeholder="assets/images/hero.jpg">
+          </div>
+          <div class="form-group">
+            <label class="form-label">GI page image</label>
+            <input class="form-input" id="photo_gi" placeholder="assets/images/gi.jpg">
+          </div>
+          <div class="form-group">
+            <label class="form-label">GOAT page image</label>
+            <input class="form-input" id="photo_goat" placeholder="assets/images/goat.jpg">
+          </div>
+          <button class="btn btn-primary" data-save="photos">Save paths</button>
+          <div id="photos-status"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="demo.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    (function () {
+      const STORAGE_KEY = "courtside_admin_data";
+      let data = null;
+
+      function loadData() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            data = JSON.parse(saved);
+            return;
+          }
+        } catch (e) {}
+        data = JSON.parse(JSON.stringify(window.COURTSIDE_DEMO || {}));
+      }
+
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function showStatus(id, msg, type = "success") {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = `<div class="status-message ${type}">${msg}</div>`;
+        setTimeout(() => { el.innerHTML = ""; }, 3000);
+      }
+
+      function isLoggedIn() {
+        return sessionStorage.getItem("courtside_admin") === "1";
+      }
+
+      function showAdmin() {
+        document.getElementById("login-view").style.display = "none";
+        document.getElementById("admin-view").style.display = "grid";
+        loadData();
+        renderAllEditors();
+      }
+
+      function showLogin() {
+        document.getElementById("login-view").style.display = "block";
+        document.getElementById("admin-view").style.display = "none";
+      }
+
+      // Nav sections
+      document.querySelectorAll(".admin-nav a").forEach(link => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          document.querySelectorAll(".admin-nav a").forEach(a => a.classList.remove("active"));
+          link.classList.add("active");
+          const section = link.dataset.section;
+          document.querySelectorAll(".admin-section").forEach(s => s.classList.remove("active"));
+          document.getElementById("section-" + section).classList.add("active");
+        });
+      });
+
+      // Login
+      document.getElementById("login-btn").addEventListener("click", () => {
+        // Demo: accept anything. Later: Supabase auth.signInWithPassword
+        sessionStorage.setItem("courtside_admin", "1");
+        showAdmin();
+      });
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        sessionStorage.removeItem("courtside_admin");
+        showLogin();
+      });
+
+      function renderForecastsEditor() {
+        const container = document.getElementById("forecasts-editor");
+        if (!data.forecasts) return;
+        container.innerHTML = data.forecasts.map((f, i) => `
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <input class="form-input" data-f="${i}" data-field="category" value="${f.category}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Player / Team</label>
+              <input class="form-input" data-f="${i}" data-field="player" value="${f.player}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Team code</label>
+              <input class="form-input" data-f="${i}" data-field="team" value="${f.team || ""}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confidence %</label>
+              <input class="form-input" type="number" data-f="${i}" data-field="confidence" value="${f.confidence}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Explanation</label>
+              <textarea class="form-textarea" data-f="${i}" data-field="explanation">${f.explanation}</textarea>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      function renderTop100Editor() {
+        const container = document.getElementById("top100-editor");
+        if (!data.top100) return;
+        let html = `<table class="data-table"><thead><tr>
+          <th>Rank</th><th>Player</th><th>Team</th><th>Pos</th><th>PTS</th><th>REB</th><th>AST</th><th>EFF</th><th>GI</th><th>±</th>
+        </tr></thead><tbody>`;
+        data.top100.forEach((p, i) => {
+          html += `<tr>
+            <td><input class="form-input" style="width:50px;" data-t="${i}" data-field="rank" type="number" value="${p.rank}"></td>
+            <td><input class="form-input" style="min-width:140px;" data-t="${i}" data-field="player" value="${p.player}"></td>
+            <td><input class="form-input" style="width:60px;" data-t="${i}" data-field="team" value="${p.team}"></td>
+            <td><input class="form-input" style="width:50px;" data-t="${i}" data-field="pos" value="${p.pos}"></td>
+            <td><input class="form-input" style="width:60px;" data-t="${i}" data-field="pts" type="number" step="0.1" value="${p.pts}"></td>
+            <td><input class="form-input" style="width:60px;" data-t="${i}" data-field="reb" type="number" step="0.1" value="${p.reb}"></td>
+            <td><input class="form-input" style="width:60px;" data-t="${i}" data-field="ast" type="number" step="0.1" value="${p.ast}"></td>
+            <td><input class="form-input" style="width:60px;" data-t="${i}" data-field="efficiency" type="number" step="0.1" value="${p.efficiency}"></td>
+            <td><input class="form-input" style="width:60px;" data-t="${i}" data-field="gi" type="number" step="0.1" value="${p.gi}"></td>
+            <td><input class="form-input" style="width:50px;" data-t="${i}" data-field="change" type="number" value="${p.change}"></td>
+          </tr>`;
+        });
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+      }
+
+      function renderGoatEditor() {
+        const container = document.getElementById("goat-editor");
+        if (!data.goat) return;
+        container.innerHTML = data.goat.map((g, i) => `
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <div style="display:grid;grid-template-columns:80px 1fr 80px;gap:var(--space-3);margin-bottom:var(--space-3);">
+              <div class="form-group"><label class="form-label">Rank</label><input class="form-input" data-g="${i}" data-field="rank" type="number" value="${g.rank}"></div>
+              <div class="form-group"><label class="form-label">Player</label><input class="form-input" data-g="${i}" data-field="player" value="${g.player}"></div>
+              <div class="form-group"><label class="form-label">GI</label><input class="form-input" data-g="${i}" data-field="gi" type="number" step="0.1" value="${g.gi}"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-2);margin-bottom:var(--space-3);">
+              <div class="form-group"><label class="form-label">Peak</label><input class="form-input" data-g="${i}" data-field="peak" type="number" value="${g.peak}"></div>
+              <div class="form-group"><label class="form-label">Longevity</label><input class="form-input" data-g="${i}" data-field="longevity" type="number" value="${g.longevity}"></div>
+              <div class="form-group"><label class="form-label">Winning</label><input class="form-input" data-g="${i}" data-field="winning" type="number" value="${g.winning}"></div>
+              <div class="form-group"><label class="form-label">Playoff</label><input class="form-input" data-g="${i}" data-field="playoff" type="number" value="${g.playoff}"></div>
+              <div class="form-group"><label class="form-label">Era</label><input class="form-input" data-g="${i}" data-field="era" type="number" value="${g.era}"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Explanation</label>
+              <textarea class="form-textarea" data-g="${i}" data-field="explanation">${g.explanation}</textarea>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      function renderNewsEditor() {
+        const container = document.getElementById("news-editor");
+        if (!data.news) data.news = [];
+        container.innerHTML = data.news.map((n, i) => `
+          <div class="card" style="margin-bottom:var(--space-4);">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-select" data-n="${i}" data-field="category">
+                ${["NEWS","ANALYSIS","FORECAST","ESSAY","GI","HISTORY"].map(c => 
+                  `<option value="${c}" ${n.category===c?"selected":""}>${c}</option>`).join("")}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Title</label>
+              <input class="form-input" data-n="${i}" data-field="title" value="${n.title || ""}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Excerpt</label>
+              <textarea class="form-textarea" data-n="${i}" data-field="excerpt">${n.excerpt || ""}</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input class="form-input" data-n="${i}" data-field="date" value="${n.date || ""}">
+            </div>
+            <button class="btn btn-ghost btn-sm" data-remove-news="${i}">Remove</button>
+          </div>
+        `).join("");
+
+        container.querySelectorAll("[data-remove-news]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            data.news.splice(+btn.dataset.removeNews, 1);
+            renderNewsEditor();
+          });
+        });
+      }
+
+      function renderAllEditors() {
+        if (data.siteContent) {
+          document.getElementById("hero_title_1").value = data.siteContent.hero_title_1 || "";
+          document.getElementById("hero_title_2").value = data.siteContent.hero_title_2 || "";
+          document.getElementById("hero_title_3").value = data.siteContent.hero_title_3 || "";
+          document.getElementById("hero_desc").value = data.siteContent.hero_desc || "";
+        }
+        if (data.season) document.getElementById("season").value = data.season;
+        if (data.siteContent && data.siteContent.gi_intro) {
+          document.getElementById("gi_intro").value = data.siteContent.gi_intro;
+        }
+        renderForecastsEditor();
+        renderTop100Editor();
+        renderGoatEditor();
+        renderNewsEditor();
+      }
+
+      // Collect & save
+      document.querySelectorAll("[data-save]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const type = btn.dataset.save;
+
+          if (type === "home") {
+            data.siteContent = data.siteContent || {};
+            data.siteContent.hero_title_1 = document.getElementById("hero_title_1").value;
+            data.siteContent.hero_title_2 = document.getElementById("hero_title_2").value;
+            data.siteContent.hero_title_3 = document.getElementById("hero_title_3").value;
+            data.siteContent.hero_desc = document.getElementById("hero_desc").value;
+            data.season = document.getElementById("season").value;
+            saveData();
+            showStatus("home-status", "Home content saved (localStorage). Connect Supabase to persist for all users.");
+          }
+
+          if (type === "forecasts") {
+            document.querySelectorAll("[data-f]").forEach(input => {
+              const i = +input.dataset.f;
+              const field = input.dataset.field;
+              let val = input.value;
+              if (field === "confidence") val = +val;
+              data.forecasts[i][field] = val;
+            });
+            saveData();
+            showStatus("forecasts-status", "Forecasts saved.");
+          }
+
+          if (type === "top100") {
+            document.querySelectorAll("[data-t]").forEach(input => {
+              const i = +input.dataset.t;
+              const field = input.dataset.field;
+              let val = input.value;
+              if (["rank","pts","reb","ast","efficiency","gi","change"].includes(field)) val = +val;
+              data.top100[i][field] = val;
+            });
+            saveData();
+            showStatus("top100-status", "Top 100 saved.");
+          }
+
+          if (type === "goat") {
+            document.querySelectorAll("[data-g]").forEach(input => {
+              const i = +input.dataset.g;
+              const field = input.dataset.field;
+              let val = input.value;
+              if (["rank","gi","peak","longevity","winning","playoff","era"].includes(field)) val = +val;
+              data.goat[i][field] = val;
+            });
+            saveData();
+            showStatus("goat-status", "GOAT ranking saved.");
+          }
+
+          if (type === "gi") {
+            data.siteContent = data.siteContent || {};
+            data.siteContent.gi_intro = document.getElementById("gi_intro").value;
+            saveData();
+            showStatus("gi-status", "GI text saved.");
+          }
+
+          if (type === "news") {
+            document.querySelectorAll("[data-n]").forEach(input => {
+              const i = +input.dataset.n;
+              const field = input.dataset.field;
+              data.news[i][field] = input.value;
+            });
+            saveData();
+            showStatus("news-status", "News saved.");
+          }
+
+          if (type === "photos") {
+            data.photos = {
+              hero: document.getElementById("photo_hero").value,
+              gi: document.getElementById("photo_gi").value,
+              goat: document.getElementById("photo_goat").value
+            };
+            saveData();
+            showStatus("photos-status", "Photo paths saved.");
+          }
+        });
+      });
+
+      document.getElementById("add-news").addEventListener("click", () => {
+        data.news = data.news || [];
+        data.news.push({
+          id: Date.now(),
+          category: "ANALYSIS",
+          title: "New article",
+          excerpt: "",
+          date: new Date().toISOString().slice(0, 10)
+        });
+        renderNewsEditor();
+      });
+
+      // Init
+      if (isLoggedIn()) showAdmin();
+      else showLogin();
+    })();
+  </script>
+</body>
+</html>

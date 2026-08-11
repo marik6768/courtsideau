@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COURTSIDE · GOAT Index</title>
+  <meta name="description" content="COURTSIDE GOAT Index (GI) — proprietary player comparison scale. Methodology and components explained.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  </head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">COURT<span>SIDE</span></a>
+      <nav class="nav-desktop" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="forecast.html">Forecasts</a>
+        <a href="stats.html">Stats</a>
+        <a href="gi.html" class="active">GI</a>
+        <a href="goat.html">GOAT</a>
+        <a href="news.html">News</a>
+        <a href="forum.html">Forum</a>
+        <a href="editor.html" class="nav-admin">Admin</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"></button>
+    </div>
+    <nav class="nav-mobile" aria-label="Mobile">
+      <a href="index.html">Home</a>
+      <a href="forecast.html">Forecasts</a>
+      <a href="stats.html">Stats</a>
+      <a href="gi.html">GI</a>
+      <a href="goat.html">GOAT</a>
+      <a href="news.html">News</a>
+      <a href="forum.html">Forum</a>
+      <a href="editor.html" class="nav-admin">Admin</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">System</div>
+          <h1 class="section-title">GOAT Index</h1>
+          <p class="section-desc">GI is COURTSIDE’s proprietary analytical scale for comparing players within a season and across eras.</p>
+        </div>
+
+        <div class="disclaimer">
+          <strong>Important:</strong> GI is not official NBA statistics and is not a replacement for traditional metrics. It is an authorial model designed to structure comparison, not to declare absolute truth.
+        </div>
+
+        <h2 class="section-title" style="font-size:var(--text-2xl);margin:var(--space-12) 0 var(--space-6);">Seasonal components</h2>
+        <div class="gi-components" id="gi-components"></div>
+
+        <h2 class="section-title" style="font-size:var(--text-2xl);margin:var(--space-12) 0 var(--space-6);">How it works</h2>
+        <div style="max-width:640px;color:var(--text-secondary);line-height:1.7;font-size:var(--text-base);">
+          <p style="margin-bottom:var(--space-4);">
+            Each player receives component scores based on available counting stats, advanced estimates and role context. The weighted sum produces a seasonal GI score used for the Top 100 ranking.
+          </p>
+          <p style="margin-bottom:var(--space-4);">
+            Historical rankings (see <a href="goat.html" style="color:var(--accent);">GOAT page</a>) add peak windows, longevity, championship contribution, playoff impact and relative dominance within an era.
+          </p>
+          <p>
+            Weights and inputs can be adjusted. The goal is transparency of reasoning, not a black-box “super algorithm.”
+          </p>
+        </div>
+
+        <div style="margin-top:var(--space-10);">
+          <a href="stats.html" class="btn btn-primary">View Top 100</a>
+          <a href="goat.html" class="btn btn-ghost" style="margin-left:var(--space-3);">Historical GOAT</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">COURT<span>SIDE</span></div>
+        <p>NBA analytics, proprietary GOAT Index and editorial coverage. Numbers first. Then conclusions.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Sections</h4>
+          <a href="forecast.html">Forecasts</a>
+          <a href="stats.html">Top 100</a>
+          <a href="gi.html">GOAT Index</a>
+          <a href="goat.html">GOAT</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="news.html">News</a>
+          <a href="forum.html">Forum</a>
+          <a href="editor.html">Admin</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 COURTSIDE</span>
+      <span class="demo-badge" data-demo style="display:none;">DEMO DATA</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="demo.js"></script>
+  <script src="data.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const D = window.COURTSIDE_DATA.get();
+      if (!D) return;
+      document.getElementById("gi-components").innerHTML = (D.giComponents || []).map(c => `
+        <div class="gi-component">
+          <div class="gi-component-name">${c.name}</div>
+          <div class="gi-component-desc">${c.desc}</div>
+          <div class="gi-component-weight">${c.weight}</div>
+        </div>
+      `).join("");
+    });
+  </script>
+</body>
+</html>

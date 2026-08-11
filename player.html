@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COURTSIDE · Player</title>
+  <meta name="description" content="Player profile — stats, GOAT Index and ranking.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  </head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">COURT<span>SIDE</span></a>
+      <nav class="nav-desktop" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="forecast.html">Forecasts</a>
+        <a href="stats.html">Stats</a>
+        <a href="gi.html">GI</a>
+        <a href="goat.html">GOAT</a>
+        <a href="news.html">News</a>
+        <a href="forum.html">Forum</a>
+        <a href="editor.html" class="nav-admin">Admin</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"></button>
+    </div>
+    <nav class="nav-mobile" aria-label="Mobile">
+      <a href="index.html">Home</a>
+      <a href="forecast.html">Forecasts</a>
+      <a href="stats.html">Stats</a>
+      <a href="gi.html">GI</a>
+      <a href="goat.html">GOAT</a>
+      <a href="news.html">News</a>
+      <a href="forum.html">Forum</a>
+      <a href="editor.html" class="nav-admin">Admin</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <section class="section">
+      <div class="container">
+        <div id="player-not-found" style="display:none;">
+          <h1 class="section-title">Player not found</h1>
+          <p class="section-desc">No data for this name in the current rankings.</p>
+          <a href="stats.html" class="btn btn-ghost" style="margin-top:var(--space-6);">← Top 100</a>
+        </div>
+
+        <div id="player-content" style="display:none;">
+          <div class="player-header">
+            <div class="player-info">
+              <div class="section-label" id="p-team-pos"></div>
+              <h1 id="p-name"></h1>
+              <div class="player-meta" id="p-rank-line"></div>
+            </div>
+            <div class="player-stats">
+              <div class="player-stat gi">
+                <div class="player-stat-value" id="p-gi">—</div>
+                <div class="player-stat-label">GI</div>
+              </div>
+              <div class="player-stat">
+                <div class="player-stat-value" id="p-pts">—</div>
+                <div class="player-stat-label">PTS</div>
+              </div>
+              <div class="player-stat">
+                <div class="player-stat-value" id="p-reb">—</div>
+                <div class="player-stat-label">REB</div>
+              </div>
+              <div class="player-stat">
+                <div class="player-stat-value" id="p-ast">—</div>
+                <div class="player-stat-label">AST</div>
+              </div>
+              <div class="player-stat">
+                <div class="player-stat-value" id="p-eff">—</div>
+                <div class="player-stat-label">EFF</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="disclaimer" id="p-demo" style="display:none;">
+            DEMO DATA — figures are illustrative and not live NBA statistics.
+          </div>
+
+          <div class="player-content-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);margin-top:var(--space-10);">
+            <div>
+              <h2 style="font-family:var(--font-serif);font-size:var(--text-xl);font-weight:400;margin-bottom:var(--space-4);">Season snapshot</h2>
+              <div class="card">
+                <table class="data-table">
+                  <tbody id="p-stats-table"></tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <h2 style="font-family:var(--font-serif);font-size:var(--text-xl);font-weight:400;margin-bottom:var(--space-4);">Ranking</h2>
+              <div class="card">
+                <div style="margin-bottom:var(--space-4);">
+                  <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Top 100</div>
+                  <div style="font-size:var(--text-2xl);font-weight:600;" id="p-rank">—</div>
+                </div>
+                <div style="margin-bottom:var(--space-4);">
+                  <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Rank change</div>
+                  <div id="p-change">—</div>
+                </div>
+                <div id="p-goat-block" style="display:none;">
+                  <div style="font-size:var(--text-xs);color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Historical GOAT</div>
+                  <div style="font-size:var(--text-lg);font-weight:500;" id="p-goat-rank">—</div>
+                  <p style="font-size:var(--text-sm);color:var(--text-secondary);margin-top:var(--space-2);" id="p-goat-note"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:var(--space-10);">
+            <h2 style="font-family:var(--font-serif);font-size:var(--text-xl);font-weight:400;margin-bottom:var(--space-4);">Brief</h2>
+            <p id="p-brief" style="color:var(--text-secondary);line-height:1.7;max-width:640px;"></p>
+          </div>
+
+          <div style="margin-top:var(--space-10);display:flex;gap:var(--space-3);flex-wrap:wrap;">
+            <a href="stats.html" class="btn btn-ghost">← Top 100</a>
+            <a href="goat.html" class="btn btn-ghost">GOAT ranking</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">COURT<span>SIDE</span></div>
+        <p>NBA analytics, proprietary GOAT Index and editorial coverage. Numbers first. Then conclusions.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Sections</h4>
+          <a href="forecast.html">Forecasts</a>
+          <a href="stats.html">Top 100</a>
+          <a href="gi.html">GOAT Index</a>
+          <a href="goat.html">GOAT</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="news.html">News</a>
+          <a href="forum.html">Forum</a>
+          <a href="editor.html">Admin</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 COURTSIDE</span>
+      <span class="demo-badge" data-demo style="display:none;">DEMO DATA</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="demo.js"></script>
+  <script src="data.js"></script>
+  <script src="ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+      if (!name) {
+        document.getElementById("player-not-found").style.display = "block";
+        return;
+      }
+
+      const player = window.COURTSIDE_DATA.getPlayerByName(name);
+      if (!player) {
+        document.getElementById("player-not-found").style.display = "block";
+        return;
+      }
+
+      document.getElementById("player-content").style.display = "block";
+      document.title = `COURTSIDE · ${player.player}`;
+
+      document.getElementById("p-name").textContent = player.player;
+      document.getElementById("p-team-pos").textContent = `${player.team} · ${player.pos}`;
+      document.getElementById("p-gi").textContent = player.gi.toFixed(1);
+      document.getElementById("p-pts").textContent = player.pts.toFixed(1);
+      document.getElementById("p-reb").textContent = player.reb.toFixed(1);
+      document.getElementById("p-ast").textContent = player.ast.toFixed(1);
+      document.getElementById("p-eff").textContent = player.efficiency.toFixed(1);
+      document.getElementById("p-rank").textContent = `#${player.rank}`;
+
+      let changeHtml = "—";
+      if (player.change > 0) changeHtml = `<span class="rank-change up">↑ ${player.change}</span>`;
+      else if (player.change < 0) changeHtml = `<span class="rank-change down">↓ ${Math.abs(player.change)}</span>`;
+      document.getElementById("p-change").innerHTML = changeHtml;
+      document.getElementById("p-rank-line").textContent = `Rank #${player.rank} · ${window.COURTSIDE_DATA.get().season || ""}`;
+
+      document.getElementById("p-stats-table").innerHTML = `
+        <tr><td>Points</td><td class="stat" style="text-align:right;">${player.pts.toFixed(1)}</td></tr>
+        <tr><td>Rebounds</td><td class="stat" style="text-align:right;">${player.reb.toFixed(1)}</td></tr>
+        <tr><td>Assists</td><td class="stat" style="text-align:right;">${player.ast.toFixed(1)}</td></tr>
+        <tr><td>Efficiency</td><td class="stat" style="text-align:right;">${player.efficiency.toFixed(1)}</td></tr>
+        <tr><td>GOAT Index</td><td class="gi-score" style="text-align:right;">${player.gi.toFixed(1)}</td></tr>
+      `;
+
+      const briefs = {
+        "Nikola Jokić": "Elite creation and efficiency at center. Continues to produce at a historic all-around level while elevating teammates.",
+        "Shai Gilgeous-Alexander": "High-volume scoring with strong efficiency and improving playmaking. Core of a contending roster.",
+        "Giannis Antetokounmpo": "Two-way dominance and physical force. Peak value remains among the highest in the league.",
+        "Luka Dončić": "Offensive engine with elite creation. Volume and usage define his impact profile.",
+        "Victor Wembanyama": "Unique defensive gravity and rapidly expanding offensive skill set. Trajectory is steep."
+      };
+      document.getElementById("p-brief").textContent =
+        briefs[player.player] ||
+        `${player.player} ranks #${player.rank} in the current COURTSIDE Top 100 with a GI of ${player.gi.toFixed(1)}. Full contextual analysis will expand as the model and data deepen.`;
+
+      if (window.COURTSIDE_CONFIG && window.COURTSIDE_CONFIG.DEMO_MODE) {
+        document.getElementById("p-demo").style.display = "block";
+      }
+
+      const goat = window.COURTSIDE_DATA.getGoatByName(player.player);
+      if (goat) {
+        document.getElementById("p-goat-block").style.display = "block";
+        document.getElementById("p-goat-rank").textContent = `#${goat.rank} · GI ${goat.gi.toFixed(1)}`;
+        document.getElementById("p-goat-note").textContent = goat.explanation.slice(0, 160) + "…";
+      }
+    });
+  </script>
+</body>
+</html>

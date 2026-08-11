@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COURTSIDE · Forum</title>
+  <meta name="description" content="COURTSIDE Forum — discuss NBA rankings, trades, playoffs and GOAT debates.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  
+  </head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">COURT<span>SIDE</span></a>
+      <nav class="nav-desktop" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="forecast.html">Forecasts</a>
+        <a href="stats.html">Stats</a>
+        <a href="gi.html">GI</a>
+        <a href="goat.html">GOAT</a>
+        <a href="news.html">News</a>
+        <a href="forum.html" class="active">Forum</a>
+        <a href="editor.html" class="nav-admin">Admin</a>
+      </nav>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"></button>
+    </div>
+    <nav class="nav-mobile" aria-label="Mobile">
+      <a href="index.html">Home</a>
+      <a href="forecast.html">Forecasts</a>
+      <a href="stats.html">Stats</a>
+      <a href="gi.html">GI</a>
+      <a href="goat.html">GOAT</a>
+      <a href="news.html">News</a>
+      <a href="forum.html">Forum</a>
+      <a href="editor.html" class="nav-admin">Admin</a>
+    </nav>
+  </header>
+
+  <main class="site-main">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">Community</div>
+          <h1 class="section-title">COURTSIDE Forum</h1>
+          <p class="section-desc">Topics for discussion. Full accounts, threads and moderation will be connected later. Structure is ready.</p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-4);">
+          <div class="card">
+            <h3 class="card-title">NBA</h3>
+            <p class="text-secondary" style="font-size:var(--text-sm);">General league discussion</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Trade</h3>
+            <p class="text-secondary" style="font-size:var(--text-sm);">Rumors and deal evaluation</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Playoffs</h3>
+            <p class="text-secondary" style="font-size:var(--text-sm);">Series, matchups, scenarios</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">GOAT</h3>
+            <p class="text-secondary" style="font-size:var(--text-sm);">All-time rankings debate</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">GI</h3>
+            <p class="text-secondary" style="font-size:var(--text-sm);">Methodology and scores</p>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Predictions</h3>
+            <p class="text-secondary" style="font-size:var(--text-sm);">Awards and standings forecasts</p>
+          </div>
+        </div>
+
+        <div class="disclaimer" style="margin-top:var(--space-10);">
+          Forum backend (accounts, posts, likes, moderation) is planned for a later stage. Current page establishes categories and navigation.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">COURT<span>SIDE</span></div>
+        <p>NBA analytics, proprietary GOAT Index and editorial coverage. Numbers first. Then conclusions.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Sections</h4>
+          <a href="forecast.html">Forecasts</a>
+          <a href="stats.html">Top 100</a>
+          <a href="gi.html">GOAT Index</a>
+          <a href="goat.html">GOAT</a>
+        </div>
+        <div class="footer-col">
+          <h4>More</h4>
+          <a href="news.html">News</a>
+          <a href="forum.html">Forum</a>
+          <a href="editor.html">Admin</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 COURTSIDE</span>
+      <span class="demo-badge" data-demo style="display:none;">DEMO DATA</span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
